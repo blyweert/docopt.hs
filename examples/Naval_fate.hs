@@ -28,8 +28,8 @@ main = do
 
 	opts <- optionsWithUsage testOptions usage
 
-	--print opts
-	--putStrLn ""
+	print opts
+	putStrLn ""
 
 	when (opts `isPresent` (command "ship")) $ do
 		putStrLn "Command 'ship'"

@@ -26,7 +26,7 @@ main = do
 	--args <- getArgs
 	--print args
 
-	opts <- optionsWithUsage testOptions usage
+	opts <- getArgsWithUsage testOptions usage
 
 	print opts
 	putStrLn ""

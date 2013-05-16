@@ -30,12 +30,12 @@ import System.Console.Docopt.OptParse (getArguments)
 
 -- ** Main option parsing entry points
 
-optionsWithUsage :: ParsingOptions -> String -> IO Options
-optionsWithUsage options usage =
+getArgsWithUsage :: ParsingOptions -> String -> IO Arguments
+getArgsWithUsage options usage =
     do rawargs <- getArgs
        case runParser pDocopt M.empty "" usage of
            Left err  -> failure err
-           Right dop -> case getOptions dop rawargs of
+           Right dop -> case getArguments dop rawargs of
                Left err         -> failure err
                Right parsedOpts -> return parsedOpts
 
@@ -44,9 +44,9 @@ optionsWithUsage options usage =
                         else do putStrLn usage
                                 exitFailure
 
-optionsWithUsageFile :: ParsingOptions -> FilePath -> IO Options
-optionsWithUsageFile options path = do usage <- readFile path
-                                       optionsWithUsage options usage
+getArgsWithUsageFile :: ParsingOptions -> FilePath -> IO Arguments
+getArgsWithUsageFile options path = do usage <- readFile path
+                                       getArgsWithUsage options usage
 
 -- ** Option lookup methods
 

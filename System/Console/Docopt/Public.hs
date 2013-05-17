@@ -16,7 +16,7 @@ module System.Console.Docopt.Public
 import System.Environment (getArgs)
 import System.Exit
 
-import Data.Map as M hiding (null)
+import Data.Map as M hiding (null, map)
 
 import Control.Applicative
 
@@ -105,7 +105,7 @@ getAllArgs args opt =
        _             -> []
 
 getAllArgsM :: Monad m => Arguments -> Option -> m [String]
-getAllArgsM o e = return $ getAllArgs o e
+getAllArgsM args opt = return $ getAllArgs args opt
 
 
 -- ** Public Option constructor functions
@@ -113,8 +113,12 @@ getAllArgsM o e = return $ getAllArgs o e
 command :: String -> Option
 command s = Command s
 
+-- sloppy compensation for ambiguous argument parsing from usage
 argument :: String -> Option
-argument s = Argument s
+argument s = 
+  if all (`elem` (uppers ++ numerics)) s 
+    then Argument s --assume UPPER_STYLE 
+    else Argument $ "<" ++ s ++ ">" --wrap <ang_bracket> style
 
 shortOption :: Char -> Option
 shortOption c = ShortOption c

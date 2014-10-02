@@ -27,7 +27,7 @@ import System.Console.Docopt.OptParse (getArguments)
 -- ** Main option parsing entry points
 
 optionsWithUsage :: String -> [String] -> IO Arguments
-optionsWithUsage usage rawArgs = 
+optionsWithUsage usage rawArgs =
     case runParser pDocopt M.empty "Usage" usage of
         Left err -> do putStrLn usage
                        exitFailure
@@ -45,7 +45,10 @@ optionsWithUsageDebug usage rawArgs =
         Right fmt -> do
             putStrLn "runParser succeeded"
             case getArguments fmt rawArgs of
-                Left err         -> do putStrLn "getArguments failed"
+                Left err         -> do putStrLn "getArguments failed!\n fmt:"
+                                       print fmt
+                                       putStrLn " rawArgs:"
+                                       print rawArgs
                                        putStrLn usage
                                        fail $ show err
                 Right parsedArgs -> return parsedArgs

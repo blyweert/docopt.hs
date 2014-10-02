@@ -39,10 +39,16 @@ optionsWithUsage usage rawArgs =
 optionsWithUsageDebug :: String -> [String] -> IO Arguments
 optionsWithUsageDebug usage rawArgs =
     case runParser pDocopt M.empty "Usage" usage of
-        Left err  -> fail $ show err
-        Right fmt -> case getArguments fmt rawArgs of
-            Left err         -> fail $ show err
-            Right parsedArgs -> return parsedArgs
+        Left err  -> do putStrLn "runParser failed"
+                        putStrLn usage
+                        fail $ show err
+        Right fmt -> do
+            putStrLn "runParser succeeded"
+            case getArguments fmt rawArgs of
+                Left err         -> do putStrLn "getArguments failed"
+                                       putStrLn usage
+                                       fail $ show err
+                Right parsedArgs -> return parsedArgs
 
 optionsWithUsageFile :: FilePath -> IO Arguments
 optionsWithUsageFile path = do usageStr <- readFile path
